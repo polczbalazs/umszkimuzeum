@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Múzeum — Interaktív Kiállítás</title>
+
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ░░░ NAVBAR ░░░ -->
+  <nav class="museum-nav" id="mainNav">
+    <div class="nav-inner container-fluid px-4">
+      <div class="nav-logo">
+        <span class="logo-text">Múzeum</span>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menü">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" class="nav-link active" data-section="hero">Főoldal</a></li>
+        <li><a href="#about" class="nav-link" data-section="about">Rólunk</a></li>
+        <li><a href="#gallery" class="nav-link" data-section="gallery">Kiállítás</a></li>
+        <li><a href="#quiz" class="nav-link" data-section="quiz">Kvíz</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ░░░ HERO ░░░ -->
+  <section id="hero" class="hero-section">
+    <div class="hero-content">
+      <p class="hero-eyebrow reveal">Üdvözöljük a</p>
+      <h1 class="hero-title reveal">Interaktív<br /><em>Múzeumban</em></h1>
+      <p class="hero-subtitle reveal">Fedezze fel a történelem kincseit — élménnyé varázsolva</p>
+      <div class="hero-cta reveal">
+        <a href="#gallery" class="btn-primary-museum">
+          Kiállítás megtekintése <i class="bi bi-arrow-right"></i>
+        </a>
+        <a href="#about" class="btn-ghost-museum">Tudjon meg többet</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ ABOUT ░░░ -->
+  <section id="about" class="about-section section-padding">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-5 reveal">
+          <div class="about-image-wrap">
+            <div class="about-img-placeholder">
+              <!-- Ide kerül a kép: <img src="about.jpg" alt="Múzeum belső"> -->
+              <i class="bi bi-image"></i>
+              <span>Kép helye</span>
+            </div>
+            <div class="about-badge">
+              <span class="badge-number">200+</span>
+              <span class="badge-label">Tárgy</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7 reveal">
+          <div class="section-tag">Rólunk</div>
+          <h2 class="section-title">Egy múzeum,<br /><em>ahol az idő megáll</em></h2>
+          <p class="section-body">
+            Múzeumunk egyedülálló gyűjteménnyel rendelkezik, amely évszázadok kulturális kincseit öleli fel.
+            Interaktív kiállításaink segítségével mindenki — gyermek és felnőtt egyaránt — közelebb kerülhet
+            a történelemhez, a művészethez és a tudományhoz.
+          </p>
+          <p class="section-body">
+            <strong>A szöveg és a képek ide kerülnek.</strong> Töltse fel saját tartalmával ezt a részt.
+          </p>
+          <div class="about-stats">
+            <div class="stat-item">
+              <span class="stat-number" data-target="1250">0</span>
+              <span class="stat-label">Látogató/hó</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number" data-target="48">0</span>
+              <span class="stat-label">Kiállítás</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number" data-target="12">0</span>
+              <span class="stat-label">Év óta</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ KIÁLLÍTÁS / GALÉRIA ░░░ -->
+  <section id="gallery" class="gallery-section section-padding">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">Galéria</div>
+        <h2 class="section-title">Kiállításaink</h2>
+        <p class="section-desc">Kattintson egy képre a részletek megtekintéséhez</p>
+      </div>
+
+      <!-- Szűrő gombok -->
+      <div class="gallery-filters reveal">
+        <button class="filter-btn active" data-filter="all">Összes</button>
+        <button class="filter-btn" data-filter="tortenelem">Történelem</button>
+        <button class="filter-btn" data-filter="muveszet">Művészet</button>
+        <button class="filter-btn" data-filter="tudomany">Tudomány</button>
+        <button class="filter-btn" data-filter="termeszet">Természet</button>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+
+        <div class="gallery-card reveal" data-category="tortenelem" data-modal="modal1">
+          <div class="card-img-wrap">
+            <div class="card-img-placeholder" style="--hue: 30deg">
+              <i class="bi bi-shield-fill"></i>
+            </div>
+            <div class="card-overlay"><span>Megtekintés <i class="bi bi-arrow-up-right"></i></span></div>
+          </div>
+          <div class="card-body-museum">
+            <span class="card-tag">Történelem</span>
+            <h3 class="card-title-museum">Középkori fegyvergyűjtemény</h3>
+            <p class="card-desc-museum">Ritka középkori páncélok és fegyverek eredeti állapotban megőrzött gyűjteménye.</p>
+          </div>
+        </div>
+
+        <div class="gallery-card reveal" data-category="muveszet" data-modal="modal2">
+          <div class="card-img-wrap">
+            <div class="card-img-placeholder" style="--hue: 200deg">
+              <i class="bi bi-palette-fill"></i>
+            </div>
+            <div class="card-overlay"><span>Megtekintés <i class="bi bi-arrow-up-right"></i></span></div>
+          </div>
+          <div class="card-body-museum">
+            <span class="card-tag">Művészet</span>
+            <h3 class="card-title-museum">Barokk festészet</h3>
+            <p class="card-desc-museum">A 17–18. századi európai festészet legszebb alkotásai egy helyen.</p>
+          </div>
+        </div>
+
+        <div class="gallery-card reveal" data-category="tudomany" data-modal="modal3">
+          <div class="card-img-wrap">
+            <div class="card-img-placeholder" style="--hue: 120deg">
+              <i class="bi bi-gear-fill"></i>
+            </div>
+            <div class="card-overlay"><span>Megtekintés <i class="bi bi-arrow-up-right"></i></span></div>
+          </div>
+          <div class="card-body-museum">
+            <span class="card-tag">Tudomány</span>
+            <h3 class="card-title-museum">Az ipari forradalom</h3>
+            <p class="card-desc-museum">Interaktív modellek és eredeti gépek a 19. századi ipar születéséről.</p>
+          </div>
+        </div>
+
+        <div class="gallery-card reveal" data-category="termeszet" data-modal="modal4">
+          <div class="card-img-wrap">
+            <div class="card-img-placeholder" style="--hue: 80deg">
+              <i class="bi bi-tree-fill"></i>
+            </div>
+            <div class="card-overlay"><span>Megtekintés <i class="bi bi-arrow-up-right"></i></span></div>
+          </div>
+          <div class="card-body-museum">
+            <span class="card-tag">Természet</span>
+            <h3 class="card-title-museum">Ősvilági élőlények</h3>
+            <p class="card-desc-museum">Dinoszaurusz csontváz-másolatok és ősmaradványok természetes környezetükben bemutatva.</p>
+          </div>
+        </div>
+
+        <div class="gallery-card reveal" data-category="tortenelem" data-modal="modal5">
+          <div class="card-img-wrap">
+            <div class="card-img-placeholder" style="--hue: 350deg">
+              <i class="bi bi-map-fill"></i>
+            </div>
+            <div class="card-overlay"><span>Megtekintés <i class="bi bi-arrow-up-right"></i></span></div>
+          </div>
+          <div class="card-body-museum">
+            <span class="card-tag">Történelem</span>
+            <h3 class="card-title-museum">Antik térképészet</h3>
+            <p class="card-desc-museum">Korabeli térképek, amelyek a világ felfedezésének kalandos történetét mesélik el.</p>
+          </div>
+        </div>
+
+        <div class="gallery-card reveal" data-category="muveszet" data-modal="modal6">
+          <div class="card-img-wrap">
+            <div class="card-img-placeholder" style="--hue: 270deg">
+              <i class="bi bi-music-note-beamed"></i>
+            </div>
+            <div class="card-overlay"><span>Megtekintés <i class="bi bi-arrow-up-right"></i></span></div>
+          </div>
+          <div class="card-body-museum">
+            <span class="card-tag">Művészet</span>
+            <h3 class="card-title-museum">Hangszerek a múltból</h3>
+            <p class="card-desc-museum">Évszázados hangszerek gyűjteménye — hallgassa meg, hogyan szólaltak meg!</p>
+          </div>
+        </div>
+
+        <div class="gallery-card reveal" data-category="tudomany" data-modal="modal7">
+          <div class="card-img-wrap">
+            <div class="card-img-placeholder" style="--hue: 160deg">
+              <i class="bi bi-rocket-fill"></i>
+            </div>
+            <div class="card-overlay"><span>Megtekintés <i class="bi bi-arrow-up-right"></i></span></div>
+          </div>
+          <div class="card-body-museum">
+            <span class="card-tag">Tudomány</span>
+            <h3 class="card-title-museum">Az űrkutatás kora</h3>
+            <p class="card-desc-museum">Holdra szállás, szputnyikok és az emberiség legmerészebb kalandja a világűrben.</p>
+          </div>
+        </div>
+
+        <div class="gallery-card reveal" data-category="tortenelem" data-modal="modal8">
+          <div class="card-img-wrap">
+            <div class="card-img-placeholder" style="--hue: 50deg">
+              <i class="bi bi-bank2"></i>
+            </div>
+            <div class="card-overlay"><span>Megtekintés <i class="bi bi-arrow-up-right"></i></span></div>
+          </div>
+          <div class="card-body-museum">
+            <span class="card-tag">Történelem</span>
+            <h3 class="card-title-museum">Ókori civilizációk</h3>
+            <p class="card-desc-museum">Görögök, rómaiak és egyiptomiak — az emberi civilizáció bölcsői egy tárlaton.</p>
+          </div>
+        </div>
+
+        <div class="gallery-card reveal" data-category="muveszet" data-modal="modal9">
+          <div class="card-img-wrap">
+            <div class="card-img-placeholder" style="--hue: 15deg">
+              <i class="bi bi-brush-fill"></i>
+            </div>
+            <div class="card-overlay"><span>Megtekintés <i class="bi bi-arrow-up-right"></i></span></div>
+          </div>
+          <div class="card-body-museum">
+            <span class="card-tag">Művészet</span>
+            <h3 class="card-title-museum">Reneszánsz szobrok</h3>
+            <p class="card-desc-museum">A reneszánsz kőfaragó mesterek remekmívű alkotásai valódi és másolati formában.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ KVÍZ ░░░ -->
+  <section id="quiz" class="quiz-section section-padding">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">Interaktív</div>
+        <h2 class="section-title">Mit tud a <em>történelemről?</em></h2>
+        <p class="section-desc">Próbálja ki kvízkérdéseinket!</p>
+      </div>
+
+      <div class="quiz-wrap reveal">
+        <div id="quizContainer">
+          <div class="quiz-progress-bar">
+            <div class="quiz-progress-fill" id="quizProgressFill"></div>
+          </div>
+          <p class="quiz-counter" id="quizCounter">1 / 8</p>
+          <h3 class="quiz-question" id="quizQuestion"></h3>
+          <div class="quiz-options" id="quizOptions"></div>
+          <div class="quiz-feedback" id="quizFeedback"></div>
+          <button class="btn-primary-museum quiz-next" id="quizNext" style="display:none">
+            Következő <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+        <div id="quizResult" style="display:none">
+          <div class="quiz-result-inner">
+            <h3 class="result-title">Eredmény</h3>
+            <p class="result-score" id="resultScore"></p>
+            <p class="result-msg" id="resultMsg"></p>
+            <button class="btn-primary-museum" id="quizRestart">Újrakezdés</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ FOOTER ░░░ -->
+  <footer class="museum-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="logo-text">Múzeum</span>
+          <p class="footer-tagline">Ahol a múlt életre kel.</p>
+        </div>
+        <div class="footer-links-group">
+          <h6>Oldaltérkép</h6>
+          <ul>
+            <li><a href="#hero">Főoldal</a></li>
+            <li><a href="#about">Rólunk</a></li>
+            <li><a href="#gallery">Kiállítás</a></li>
+            <li><a href="#quiz">Kvíz</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h6>Közösség</h6>
+          <ul>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">YouTube</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Múzeum — Iskolai projekt</p>
+        <p>Készítette: <strong>Levi, Balazs</strong></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ░░░ MODAL ░░░ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box" id="modalBox">
+      <button class="modal-close" id="modalClose"><i class="bi bi-x-lg"></i></button>
+      <div class="modal-img-wrap">
+        <div class="modal-img-placeholder" id="modalImgPlaceholder">
+          <i class="bi bi-image"></i>
+          <span>Kép helye</span>
+        </div>
+      </div>
+      <div class="modal-content-inner">
+        <span class="modal-tag" id="modalTag"></span>
+        <h3 class="modal-title" id="modalTitle"></h3>
+        <p class="modal-body" id="modalBody"></p>
+        <div class="modal-meta" id="modalMeta"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
