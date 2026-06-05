@@ -45,7 +45,7 @@ Nincs szükség bonyolult telepítésre!
 3.  Böngéssz a gyűjteményben!
 
 ## Weboldal link
-https://polczbalazs.github.io/umszkimuzeum/index.html
+https://polczbalazs.github.io/umszkimuzeum/
 
 ---
 *BMSZC UMSZKI © 2026*
