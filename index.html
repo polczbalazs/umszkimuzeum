@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Budapesti Műszaki SZC Újpesti Két Tanítási Nyelvű Műszaki Technikum Virtuális Múzeuma">
+    <title>UMSZKI Virtuális Galéria | Est. 1927</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Montserrat:wght@200;300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           1. CSS VÁLTOZÓK (GLOBAL DESIGN TOKENS)
+           ========================================================================== */
+        :root {
+            --bg-deep: #050608;
+            --bg-surface: #0a0c10;
+            --bg-card: #11141a;
+            --bg-card-hover: #161a22;
+            
+            --accent-gold: #e6b95c;
+            --accent-gold-dark: #b8903e;
+            --accent-glow: rgba(230, 185, 92, 0.2);
+            --accent-cyan: #4a9bb5; 
+            
+            --text-primary: #ffffff;
+            --text-secondary: #a0a5b0;
+            --text-muted: #5e6473;
+            
+            --border-light: rgba(255, 255, 255, 0.05);
+            --border-gold: rgba(230, 185, 92, 0.3);
+            
+            --nav-height: 90px;
+            --section-padding: 120px 5%;
+            --card-radius: 8px;
+            --transition-smooth: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* ==========================================================================
+           2. ALAP BEÁLLÍTÁSOK (RESET)
+           ========================================================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: #2a2e38; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-gold-dark); }
+
+        /* ==========================================================================
+           3. TIPOGRÁFIA ÉS CÍMSOROK
+           ========================================================================== */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            display: inline-block;
+        }
+
+        .section-header .subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .header-line {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+            margin: 20px auto 0 auto;
+        }
+
+        /* ==========================================================================
+           4. NAVIGÁCIÓ (HEADER)
+           ========================================================================== */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; z-index: 9999; transition: var(--transition-smooth);
+            background: linear-gradient(180deg, rgba(5,6,8,0.9) 0%, rgba(5,6,8,0) 100%);
+        }
+
+        .navbar.scrolled {
+            background: rgba(5, 6, 8, 0.85); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); height: 70px;
+        }
+
+        .nav-brand { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+        .nav-logo-placeholder { width: 45px; height: 45px; object-fit: contain; transition: transform 0.3s ease; }
+        .nav-brand:hover .nav-logo-placeholder { transform: scale(1.05); }
+
+        .nav-title {
+            font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 800;
+            color: var(--text-primary); letter-spacing: 3px;
+        }
+        .nav-title span { color: var(--accent-gold); }
+
+        .nav-links { display: flex; list-style: none; gap: 40px; }
+        .nav-item { position: relative; }
+        .nav-link {
+            text-decoration: none; color: var(--text-secondary); font-size: 0.85rem;
+            font-weight: 500; text-transform: uppercase; letter-spacing: 2px;
+            transition: color 0.3s ease; padding: 10px 0; display: block;
+        }
+        .nav-link:hover { color: var(--accent-gold); }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
+            background-color: var(--accent-gold); transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* ==========================================================================
+           5. HERO SZEKCIÓ (FŐOLDAL)
+           ========================================================================== */
+        .hero-section {
+            position: relative; height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding: 0 5%; overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #151a24 0%, #050608 100%);
+        }
+
+        .hero-background {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.15;
+            background-image: linear-gradient(var(--accent-cyan) 1px, transparent 1px), linear-gradient(90deg, var(--accent-cyan) 1px, transparent 1px);
+            background-size: 100px 100px; background-position: center center;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) scale(3);
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 0 100px; } }
+
+        .hero-content { position: relative; z-index: 10; max-width: 900px; }
+        
+        .hero-badge {
+            display: inline-block; padding: 8px 20px; border: 1px solid var(--border-gold);
+            border-radius: 50px; font-family: 'Space Mono', monospace; font-size: 0.8rem;
+            color: var(--accent-gold); letter-spacing: 3px; margin-bottom: 30px;
+            background: rgba(230, 185, 92, 0.05); backdrop-filter: blur(4px);
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 6rem); line-height: 1.1; margin-bottom: 25px;
+            letter-spacing: 8px; text-transform: uppercase; text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            background: linear-gradient(180deg, #ffffff 0%, #a0a5b0 100%);
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1.5s ease forwards;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem; color: var(--text-secondary); font-weight: 300;
+            max-width: 700px; margin: 0 auto; animation: fadeInUp 1.5s ease 0.3s forwards; opacity: 0;
+        }
+
+        /* ==========================================================================
+           6. RÓLUNK SZEKCIÓ
+           ========================================================================== */
+        .about-section {
+            padding: var(--section-padding); background-color: var(--bg-surface);
+            position: relative; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+
+        .watermark-1927 {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-family: 'Cinzel', serif; font-size: 25vw; font-weight: 800;
+            color: rgba(255, 255, 255, 0.02); white-space: nowrap; pointer-events: none; z-index: 0; user-select: none;
+        }
+
+        .about-container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; display: flex; flex-direction: column; gap: 40px; }
+        
+        .about-text-block { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; align-items: center; }
+        .about-title-wrapper { border-left: 4px solid var(--accent-gold); padding-left: 30px; }
+        .about-title-wrapper h3 { font-size: 2.5rem; color: var(--text-primary); margin-bottom: 10px; letter-spacing: 2px; }
+        .about-title-wrapper .est { color: var(--accent-gold); font-family: 'Space Mono', monospace; font-size: 1.2rem; letter-spacing: 4px; }
+        .about-content p { font-size: 1.15rem; color: var(--text-secondary); margin-bottom: 25px; text-align: justify; font-weight: 300; }
+        .about-content strong { color: var(--text-primary); font-weight: 500; }
+        .drop-cap::first-letter {
+            font-family: 'Cinzel', serif; font-size: 4rem; color: var(--accent-gold); float: left;
+            line-height: 0.8; padding-right: 15px; padding-top: 5px;
+        }
+
+        /* ==========================================================================
+           7. GALÉRIA SZEKCIÓ (Dinamikus Masonry-szerű Grid)
+           ========================================================================== */
+        .gallery-section {
+            padding: var(--section-padding);
+            position: relative;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .artifact-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-auto-flow: dense; /* Organikus, térkitöltő elrendezés */
+            gap: 30px;
+            perspective: 1000px;
+        }
+
+        /* Galéria elemeinek méretvariációi */
+        .artifact-card {
+            background: var(--bg-card);
+            border-radius: var(--card-radius);
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            opacity: 0;
+            transform: translateY(50px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .artifact-wide { grid-column: span 2; }
+        .artifact-tall { grid-row: span 2; }
+        .artifact-large { grid-column: span 2; grid-row: span 2; }
+
+        .artifact-card.revealed { animation: slideUpFade 0.8s ease forwards; }
+
+        .artifact-inner {
+            padding: 20px; height: 100%; display: flex; flex-direction: column;
+            transform: translateZ(30px); border-radius: var(--card-radius); overflow: hidden;
+            position: relative; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            background: linear-gradient(145deg, #161a22 0%, #0d1015 100%);
+        }
+
+        .artifact-glare {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 10;
+        }
+
+        .artifact-card:hover .artifact-glare { opacity: 1; }
+
+        .artifact-visual {
+            width: 100%; min-height: 200px; flex-grow: 1; background: #000;
+            border: 1px solid var(--border-light); border-radius: 4px; margin-bottom: 25px;
+            position: relative; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .artifact-tall .artifact-visual, .artifact-large .artifact-visual { min-height: 350px; }
+
+        .artifact-svg-pattern {
+            width: 70%; height: 70%; opacity: 0.6; transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .artifact-card:hover .artifact-svg-pattern { transform: scale(1.1); opacity: 1; }
+
+        .artifact-visual::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(230, 185, 92, 0.03) 2px, rgba(230, 185, 92, 0.03) 4px);
+            pointer-events: none;
+        }
+
+        .artifact-plaque {
+            background: linear-gradient(to bottom, #1e222b, #11141a); border: 1px solid #2a2e38;
+            padding: 20px; border-radius: 4px; text-align: center; position: relative;
+            border-top: 2px solid var(--accent-gold-dark); box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        .plaque-screw { position: absolute; width: 6px; height: 6px; background: #444; border-radius: 50%; box-shadow: inset 1px 1px 2px #000, 0.5px 0.5px 0 rgba(255,255,255,0.2); }
+        .screw-tl { top: 8px; left: 8px; } .screw-tr { top: 8px; right: 8px; }
+        .screw-bl { bottom: 8px; left: 8px; } .screw-br { bottom: 8px; right: 8px; }
+
+        .artifact-plaque h3 { font-size: 1.1rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .artifact-id { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent-gold); letter-spacing: 2px; opacity: 0.8; }
+        
+        .view-hint {
+            margin-top: 15px; font-size: 0.75rem; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s ease;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+        }
+        
+        .view-hint::before {
+            content: '+'; font-size: 1.2rem; color: var(--accent-gold); line-height: 1;
+        }
+
+        .artifact-card:hover .view-hint { color: var(--accent-cyan); }
+
+        /* ==========================================================================
+           8. LIGHTBOX / MODAL RENDSZER (Nagyított nézet)
+           ========================================================================== */
+        .lightbox-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 3, 4, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            z-index: 10000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        }
+
+        .lightbox-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .lightbox-content {
+            background: var(--bg-card); border: 1px solid var(--border-gold);
+            padding: 40px; border-radius: var(--card-radius); max-width: 900px; width: 90%;
+            position: relative; transform: scale(0.9); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 40px rgba(230, 185, 92, 0.1);
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .lightbox-overlay.active .lightbox-content { transform: scale(1); }
+
+        .lightbox-close {
+            position: absolute; top: 20px; right: 25px; font-size: 2.5rem;
+            color: var(--text-secondary); cursor: pointer; transition: color 0.3s ease; line-height: 1;
+        }
+
+        .lightbox-close:hover { color: var(--accent-gold); }
+
+        .lightbox-image-area {
+            width: 100%; height: 350px; background: #000; border: 1px solid #222;
+            margin-bottom: 30px; display: flex; justify-content: center; align-items: center;
+        }
+
+        .lightbox-details { text-align: center; }
+        .lightbox-details h3 { font-size: 2rem; color: var(--accent-gold); margin-bottom: 10px; letter-spacing: 4px; text-transform: uppercase; }
+        .lightbox-desc { color: var(--text-secondary); max-width: 700px; line-height: 1.8; font-weight: 300; font-size: 1.1rem;}
+
+        /* ==========================================================================
+           9. KAPCSOLAT SZEKCIÓ
+           ========================================================================== */
+        .contact-section { padding: var(--section-padding); background-color: var(--bg-surface); border-top: 1px solid var(--border-light); position: relative; }
+        .contact-container { max-width: 800px; margin: 0 auto; background: var(--bg-card); padding: 50px; border-radius: var(--card-radius); box-shadow: 0 15px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255, 255, 255, 0.03); position: relative; }
+        .contact-container::before { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; background: linear-gradient(45deg, var(--accent-gold), transparent, var(--accent-cyan)); z-index: -1; border-radius: 10px; opacity: 0.2; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 10px; color: var(--accent-gold); font-family: 'Space Mono', monospace; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; }
+        .form-control { width: 100%; padding: 15px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-light); border-radius: 4px; color: var(--text-primary); font-family: 'Montserrat', sans-serif; font-size: 1rem; transition: var(--transition-smooth); outline: none; }
+        .form-control:focus { border-color: var(--accent-gold); box-shadow: 0 0 15px var(--accent-glow); background: rgba(0, 0, 0, 0.5); }
+        textarea.form-control { resize: vertical; min-height: 150px; }
+        .submit-btn { background: transparent; border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 15px 40px; font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: var(--transition-smooth); width: 100%; font-size: 1rem; border-radius: 4px; }
+        .submit-btn:hover { background: var(--accent-gold); color: var(--bg-deep); box-shadow: 0 0 20px var(--accent-glow); font-weight: bold; }
+
+        /* ==========================================================================
+           10. FOOTER
+           ========================================================================== */
+        .footer { background-color: #030405; padding: 80px 5% 40px 5%; border-top: 1px solid rgba(255,255,255,0.02); text-align: center; position: relative; }
+        .footer-logo { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 800; color: rgba(255,255,255,0.1); letter-spacing: 10px; margin-bottom: 40px; }
+        .creators-block { margin-bottom: 40px; }
+        .creators-label { font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
+        .creators-names { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--text-primary); letter-spacing: 3px; }
+        .creators-names span { color: var(--accent-gold); }
+        .footer-line { width: 200px; height: 1px; background: rgba(255,255,255,0.05); margin: 0 auto 30px auto; }
+        .copyright { font-size: 0.85rem; color: #444; letter-spacing: 1px; }
+
+        /* ==========================================================================
+           11. ANIMÁCIÓK ÉS MEDIA QUERIES
+           ========================================================================== */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 1024px) {
+            .about-text-block { grid-template-columns: 1fr; gap: 30px; }
+            .artifact-wide, .artifact-tall, .artifact-large { grid-column: span 1; grid-row: span 1; }
+            .artifact-tall .artifact-visual, .artifact-large .artifact-visual { min-height: 200px; }
+            .watermark-1927 { font-size: 40vw; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .section-header h2 { font-size: 2.2rem; }
+            .about-title-wrapper h3 { font-size: 2rem; }
+            .contact-container { padding: 30px; }
+            .lightbox-image-area { height: 250px; }
+            .lightbox-content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGÁCIÓ -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-brand">
+            <img src="képek/logo.png" alt="UMSZKI Logó" class="nav-logo-placeholder">
+            <div class="nav-title">BMSZC <span>UMSZKI</span></div>
+        </a>
+        <ul class="nav-links">
+            <li class="nav-item"><a href="#rolunk" class="nav-link">Rólunk</a></li>
+            <li class="nav-item"><a href="#galeria" class="nav-link">Galéria</a></li>
+            <li class="nav-item"><a href="#kapcsolat" class="nav-link">Kapcsolat</a></li>
+        </ul>
+    </nav>
+
+    <!-- FŐOLDAL (HERO) -->
+    <header class="hero-section">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <div class="hero-badge">ARCHÍVUM RENDSZER AKTIVÁLVA</div>
+            <h1 class="hero-title">Virtuális Galéria</h1>
+            <p class="hero-subtitle">Böngéssz intézményünk történelmi és futurisztikus eszközei között egy interaktív, folyamatos kiállítótérben. Kattints a műtárgyakra a részletekért!</p>
+        </div>
+    </header>
+
+    <!-- RÓLUNK SZEKCIÓ -->
+    <section id="rolunk" class="about-section">
+        <div class="watermark-1927">1927</div>
+        <div class="about-container">
+            <div class="section-header">
+                <h2>Intézményünk</h2>
+                <div class="header-line"></div>
+                <div class="subtitle">A múlt tisztelete, a jövő építése</div>
+            </div>
+            <div class="about-text-block">
+                <div class="about-title-wrapper">
+                    <h3>Fa- és Fémipartól<br>az Informatikáig</h3>
+                    <div class="est">EST. 1927</div>
+                </div>
+                <div class="about-content">
+                    <p class="drop-cap">
+                        <strong>A Magyar Királyi Állami Fa- és Fémipari Szakiskolaként 1927-ben alapított</strong> intézmény a kezdetektől a magyar ipar szakember-utánpótlásának központja volt. 
+                    </p>
+                    <p>
+                        Az évtizedek során az épület és az oktatás formálódott, a fémipartól eljutva a híradástechnikán és elektronikán át (Landler korszak) egészen a mai, modern felhőalapú rendszerekig és robotikáig. Ez a galéria az intézményünkben használt és oktatott technológiák evolúcióját mutatja be.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALÉRIA SZEKCIÓ -->
+    <main id="galeria" class="gallery-section">
+        <div class="section-header">
+            <h2>A Gyűjtemény</h2>
+            <div class="header-line"></div>
+            <div class="subtitle">Kattints a kártyákra a kibővített nézethez</div>
+        </div>
+
+        <div class="artifact-gallery">
+            <!-- 1. Tárgy (Nagy) -->
+            <div class="artifact-card artifact-large" data-id="01">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--accent-gold)" stroke-width="0.5">
+                            <circle cx="50" cy="50" r="40" stroke-dasharray="2 2"/>
+                            <rect x="30" y="30" width="40" height="40" transform="rotate(45 50 50)"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>Alapító Okirat</h3>
+                        <div class="artifact-id">ID: UM-1927-01</div>
+                        <div class="hidden-desc" style="display:none;">A Magyar Királyi Állami Fa- és Fémipari Szakiskola eredeti alapító okirata 1927-ből. Ezzel az okmánnyal vette kezdetét az a szakmai oktatómunka Újpesten, amely szilárdan megalapozta a mai UMSZKI hírnevét.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Tárgy -->
+            <div class="artifact-card" data-id="02">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--text-secondary)" stroke-width="1">
+                            <polygon points="50,10 90,90 10,90" />
+                            <circle cx="50" cy="65" r="15" stroke="var(--accent-cyan)"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>Esztergapad Alkatrész</h3>
+                        <div class="artifact-id">ID: UM-1935-02</div>
+                        <div class="hidden-desc" style="display:none;">A kezdeti évtizedekben az iskolában a fémipari és gépészeti képzés dominált. Ez az eredeti, diákok által fémesztergán készített, nagy pontosságú vizsgamunka a 30-as évekből származik.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Tárgy (Magas) -->
+            <div class="artifact-card artifact-tall" data-id="03">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--text-secondary)" stroke-width="1">
+                            <rect x="20" y="20" width="60" height="60" rx="10"/>
+                            <circle cx="50" cy="50" r="10" fill="var(--accent-gold)"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>Deprez-féle Mérőműszer</h3>
+                        <div class="artifact-id">ID: UM-1948-03</div>
+                        <div class="hidden-desc" style="display:none;">Az elektrotechnika térnyerésének első jelei az oktatásban. A feszültség- és árammérés alapjait ezeken a robusztus, analóg lengőtekercses műszereken sajátították el.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Tárgy -->
+            <div class="artifact-card" data-id="04">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--text-secondary)" stroke-width="0.5">
+                            <path d="M10,50 Q50,10 90,50 T10,50" />
+                            <line x1="50" y1="20" x2="50" y2="80"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>Elektroncsöves Erősítő</h3>
+                        <div class="artifact-id">ID: UM-1950-04</div>
+                        <div class="hidden-desc" style="display:none;">A rádió- és televíziószerelő szaktudás alapkövei az elektroncsövek voltak. Működésük megértése elengedhetetlen volt a korabeli berendezések javításához.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Tárgy (Széles) -->
+            <div class="artifact-card artifact-wide" data-id="08">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--accent-cyan)" stroke-width="0.5">
+                            <path d="M10,50 Q25,25 50,50 T90,50" stroke-width="2"/>
+                            <circle cx="50" cy="50" r="30" stroke-dasharray="1 3"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>Z80 Mikroprocesszor</h3>
+                        <div class="artifact-id">ID: UM-1982-08</div>
+                        <div class="hidden-desc" style="display:none;">A digitális korszak hajnala. A Z80-as processzorokra épülő mikroszámítógépek az oktatásban paradigmaváltást hoztak, itt kezdtek a hallgatók Assembly szintű programozást tanulni.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Tárgy -->
+            <div class="artifact-card" data-id="06">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--text-secondary)" stroke-width="1">
+                            <path d="M20,80 L50,20 L80,80 Z" stroke-dasharray="4 2"/>
+                            <circle cx="50" cy="60" r="10" fill="var(--accent-cyan)"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>Tranzisztoros Oktatópanel</h3>
+                        <div class="artifact-id">ID: UM-1965-06</div>
+                        <div class="hidden-desc" style="display:none;">A félvezetők forradalmasították az ipart. Ez az oktatópanel a germánium tranzisztorok logikai felépítését és működését mutatta be.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. Tárgy -->
+            <div class="artifact-card" data-id="11">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--accent-cyan)" stroke-width="1">
+                            <rect x="20" y="30" width="60" height="40" rx="5"/>
+                            <line x1="30" y1="70" x2="70" y2="70"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>Cisco Router (2500 széria)</h3>
+                        <div class="artifact-id">ID: UM-1998-11</div>
+                        <div class="hidden-desc" style="display:none;">Az UMSZKI Magyarországon az elsők között csatlakozott a globális Cisco Hálózati Akadémiához. Ez az eszköz a professzionális hálózatépítő képzés indulását szimbolizálja.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Tárgy (Magas) -->
+            <div class="artifact-card artifact-tall" data-id="15">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--accent-gold)" stroke-width="0.5">
+                            <circle cx="50" cy="50" r="45" stroke-dasharray="1 5"/>
+                            <polygon points="50,20 75,70 25,70" stroke="var(--accent-cyan)" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>IoT Szerver Központ</h3>
+                        <div class="artifact-id">ID: UM-2022-15</div>
+                        <div class="hidden-desc" style="display:none;">Az okos rendszerek térnyerése: felhőalapú architektúrák és az Internet of Things (IoT) programozása az UMSZKI laborjaiban. A diákok adatelemzésen és szenzorhálózatokon keresztül menedzselik a rendszereket.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. Tárgy -->
+            <div class="artifact-card" data-id="13">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--text-secondary)" stroke-width="1">
+                            <path d="M10,90 L50,10 L90,90"/>
+                            <line x1="30" y1="50" x2="70" y2="50"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>Arduino Robotkar</h3>
+                        <div class="artifact-id">ID: UM-2015-13</div>
+                        <div class="hidden-desc" style="display:none;">A mechatronika és a hardverközeli programozás ötvözése. A mikrokontrollerek (Arduino, Raspberry Pi) térnyerése lehetővé tette a komplex robotikai projektek építését.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. Tárgy (Széles) -->
+            <div class="artifact-card artifact-wide" data-id="20">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--accent-cyan)" stroke-width="0.5">
+                            <circle cx="50" cy="50" r="30" stroke-dasharray="2 4"/>
+                            <line x1="50" y1="10" x2="50" y2="90" stroke="rgba(255,255,255,0.1)"/>
+                            <line x1="10" y1="50" x2="90" y2="50" stroke="rgba(255,255,255,0.1)"/>
+                            <circle cx="50" cy="50" r="15" stroke="var(--accent-gold)"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>Drónvezérlő Központ</h3>
+                        <div class="artifact-id">ID: UM-2026-20</div>
+                        <div class="hidden-desc" style="display:none;">Autonóm rendszerek és dróntechnológia. Ez a szimulációs központ a jövő iparát vetíti előre, ahol a diákok mesterséges intelligenciával látják el a repülő robotokat.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. Tárgy -->
+            <div class="artifact-card" data-id="16">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--accent-gold)" stroke-width="1">
+                            <path d="M50,15 L85,35 L85,75 L50,95 L15,75 L15,35 Z" stroke-dasharray="3 3"/>
+                            <circle cx="50" cy="55" r="5" fill="var(--accent-cyan)"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>AI Kódoló Állomás</h3>
+                        <div class="artifact-id">ID: UM-2026-16</div>
+                        <div class="hidden-desc" style="display:none;">A modern szoftverfejlesztés elengedhetetlen eszköze az MI. Ezen az állomáson a diákok a nyelvi modellekkel együttműködve sajátítják el a programozást.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12. Tárgy -->
+            <div class="artifact-card" data-id="17">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--text-secondary)" stroke-width="1">
+                            <rect x="15" y="35" width="70" height="30" rx="15"/>
+                            <circle cx="35" cy="50" r="8"/>
+                            <circle cx="65" cy="50" r="8"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>VR Oktatósisak</h3>
+                        <div class="artifact-id">ID: UM-2026-17</div>
+                        <div class="hidden-desc" style="display:none;">Virtuális és kiterjesztett valóság a műszaki oktatásban. Bonyolult szerverparkok, mikroelektronikai panelek tanulmányozása valós időben, 3D térben.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 13. Tárgy -->
+            <div class="artifact-card" data-id="18">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--text-secondary)" stroke-width="1">
+                            <ellipse cx="50" cy="50" rx="40" ry="15" transform="rotate(45 50 50)"/>
+                            <ellipse cx="50" cy="50" rx="40" ry="15" transform="rotate(-45 50 50)"/>
+                            <circle cx="50" cy="50" r="3" fill="var(--accent-cyan)"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>Kvantum Szimulátor</h3>
+                        <div class="artifact-id">ID: UM-2026-18</div>
+                        <div class="hidden-desc" style="display:none;">Betekintés a jövő technológiájába. Az intézmény szoftveres szimulátorokon keresztül felkészíti a tanulókat a kvantum-kriptográfia alapjaira.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 14. Tárgy -->
+            <div class="artifact-card" data-id="19">
+                <div class="artifact-inner">
+                    <div class="artifact-glare"></div>
+                    <div class="artifact-visual">
+                        <svg class="artifact-svg-pattern" viewBox="0 0 100 100" fill="none" stroke="var(--text-secondary)" stroke-width="1">
+                            <rect x="20" y="20" width="60" height="50" rx="2"/>
+                            <line x1="25" y1="30" x2="40" y2="30"/>
+                            <line x1="40" y1="70" x2="60" y2="70" stroke="var(--accent-gold)"/>
+                        </svg>
+                    </div>
+                    <div class="artifact-plaque">
+                        <div class="plaque-screw screw-tl"></div><div class="plaque-screw screw-tr"></div>
+                        <div class="plaque-screw screw-bl"></div><div class="plaque-screw screw-br"></div>
+                        <h3>Hacker Terminál</h3>
+                        <div class="artifact-id">ID: UM-2026-19</div>
+                        <div class="hidden-desc" style="display:none;">Kiberbiztonsági állomás. A diákok ezen az izolált terminálon támadó és védekező szimulációkat futtatva tanulják meg a hálózatvédelmet.</div>
+                        <div class="view-hint">Bővebb információ</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- KAPCSOLAT SZEKCIÓ -->
+    <section id="kapcsolat" class="contact-section">
+        <div class="section-header">
+            <h2>Kapcsolat</h2>
+            <div class="header-line"></div>
+            <div class="subtitle">Kérdésed van? Írj nekünk!</div>
+        </div>
+        <div class="contact-container">
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name">Név</label>
+                    <input type="text" id="name" class="form-control" placeholder="Példa János" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail cím</label>
+                    <input type="email" id="email" class="form-control" placeholder="janos@pelda.hu" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Tárgy</label>
+                    <input type="text" id="subject" class="form-control" placeholder="Mivel kapcsolatban írsz?" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Üzenet</label>
+                    <textarea id="message" class="form-control" placeholder="Írd le a kérdésed vagy észrevételed..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Üzenet Elküldése</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- LIGHTBOX (Nagyító felugró ablak) -->
+    <div class="lightbox-overlay" id="lightbox">
+        <div class="lightbox-content">
+            <div class="lightbox-close" id="lightbox-close">&times;</div>
+            <div class="lightbox-image-area" id="lightbox-image">
+                <!-- Ide generálja a JS az SVG-t -->
+            </div>
+            <div class="lightbox-details">
+                <h3 id="lightbox-title">Műtárgy neve</h3>
+                <p class="artifact-id" id="lightbox-id" style="margin-bottom: 20px;">ID: ???</p>
+                <p class="lightbox-desc" id="lightbox-desc">Leírás töltése...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- LÁBLÉC -->
+    <footer class="footer">
+        <div class="footer-logo">UMSZKI</div>
+        <div class="creators-block">
+            <div class="creators-label">A Virtuális Archívumot Fejlesztette:</div>
+            <div class="creators-names"><span>Pölcz Balázs</span> & <span>Pechal Levente</span></div>
+        </div>
+        <div class="footer-line"></div>
+        <div class="copyright">&copy; 2026 BMSZC UMSZKI Virtuális Múzeum. Minden jog fenntartva. | Est. 1927</div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. NAVIGÁCIÓ SÖTÉTÍTÉS
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) navbar.classList.add('scrolled');
+                else navbar.classList.remove('scrolled');
+            });
+
+            // 2. SCROLL ANIMÁCIÓK
+            const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, revealOptions);
+
+            document.querySelectorAll('.artifact-card').forEach((card, index) => {
+                // Kis késleltetés a Masonry elrendezés szebb betöltéséhez
+                card.style.animationDelay = `${(index % 4) * 0.1}s`;
+                revealObserver.observe(card);
+            });
+
+            // 3. 3D TILT EFFEKTUS
+            const cards = document.querySelectorAll('.artifact-card');
+            cards.forEach(card => {
+                const inner = card.querySelector('.artifact-inner');
+                const glare = card.querySelector('.artifact-glare');
+                
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top; 
+                    const centerX = (x / rect.width - 0.5) * 2;
+                    const centerY = (y / rect.height - 0.5) * 2;
+                    const tiltX = centerY * -5; 
+                    const tiltY = centerX * 5;  
+                    
+                    inner.style.transform = `translateZ(30px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+                    glare.style.background = `radial-gradient(circle at ${(x / rect.width) * 100}% ${(y / rect.height) * 100}%, rgba(255,255,255,0.15) 0%, transparent 60%)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    inner.style.transition = 'transform 0.5s ease';
+                    inner.style.transform = 'translateZ(30px) rotateX(0deg) rotateY(0deg)';
+                    setTimeout(() => inner.style.transition = 'none', 500);
+                });
+                
+                card.addEventListener('mouseenter', () => inner.style.transition = 'none');
+            });
+
+            // 4. LIGHTBOX RENDSZER
+            const lightbox = document.getElementById('lightbox');
+            const lightboxClose = document.getElementById('lightbox-close');
+            
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    document.getElementById('lightbox-image').innerHTML = card.querySelector('.artifact-visual').innerHTML;
+                    document.getElementById('lightbox-title').innerText = card.querySelector('h3').innerText;
+                    document.getElementById('lightbox-id').innerText = card.querySelector('.artifact-id').innerText;
+                    document.getElementById('lightbox-desc').innerHTML = card.querySelector('.hidden-desc').innerHTML;
+                    
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden'; 
+                });
+            });
+            
+            lightboxClose.addEventListener('click', closeLightbox);
+            lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+            
+            function closeLightbox() {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            // 5. KAPCSOLAT ŰRLAP
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const btn = contactForm.querySelector('.submit-btn');
+                    const originalText = btn.innerText;
+                    
+                    btn.innerText = "ÜZENET ELKÜLDVE!";
+                    btn.style.backgroundColor = "var(--accent-gold)";
+                    btn.style.color = "var(--bg-deep)";
+                    
+                    contactForm.reset();
+                    
+                    setTimeout(() => {
+                        btn.innerText = originalText;
+                        btn.style.backgroundColor = "transparent";
+                        btn.style.color = "var(--accent-gold)";
+                    }, 3000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
