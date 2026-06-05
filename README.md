@@ -44,5 +44,8 @@ Nincs szükség bonyolult telepítésre!
 2.  Nyisd meg az `index.html` fájlt bármilyen webböngészőben.
 3.  Böngéssz a gyűjteményben!
 
+## Weboldal link
+https://polczbalazs.github.io/umszkimuzeum/index.html
+
 ---
 *BMSZC UMSZKI © 2026*
